@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html class='use-all-space'>
+    <head>
+        <meta http-equiv='X-UA-Compatible' content='IE=Edge' />
+        <meta charset='UTF-8'>
+        <title>MAPA DIDIER TORO</title>
+        <meta name='viewport'
+              content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no'/>
+        <link rel='stylesheet' type='text/css' href='https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps.css'>
+        <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.15.0/maps/maps-web.min.js"></script>
+        <!--        biblioteca de mapas -->
+
+        <link rel='stylesheet' type='text/css' href='https://api.tomtom.com/maps-sdk-for-web/cdn/plugins/SearchBox/3.1.3-public-preview.0/SearchBox.css'/>
+        <!--        estilo de la caaja de busqueda-->
+        <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.1.2-public-preview.15/services/services-web.min.js"></script>
+        <!--    funcionalidad de la caja de busqueda-->
+        <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/plugins/SearchBox/3.1.3-public-preview.0/SearchBox-web.js"></script>
+        <!--    repositorio y base de datos donde se realiza la busqueda-->
+
+
+        <style>
+            #map {
+                width: 800px;
+                height: 600px;
+            }
+            /*            tamaño del mapa a mostrar en pantalla*/
+        </style>
+    </head>
+    <body>
+        <div id='map' class='map'></div>
+        <!--        division de la pagina en la que se insera el mapa-->
+        <script>
+            //    caja de busqueda
+            var options = {
+                searchOptions: {//opciones de busqueda
+                    key: '<m6wpRFrZC1bxm6XAacW0ymQ1aImCOhr6>',
+                    language: 'en-GB',
+                    limit: 5
+                },
+                autocompleteOptions: {//opcion de autocompletar
+                    key: '<m6wpRFrZC1bxm6XAacW0ymQ1aImCOhr6>',
+                    language: 'en-GB'
+                }
+            };
+            var ttSearchBox = new tt.plugins.SearchBox(tt.services, options);//crea el objeto barra de busqueda dentro del programa
+            var searchBoxHTML = ttSearchBox.getSearchBoxHTML(); //agrega el mapa a la pagina
+            document.body.append(searchBoxHTML);
+        </script>
+
+
+        <script>
+            var map = tt.map({//crea el mapa
+                key: 'm6wpRFrZC1bxm6XAacW0ymQ1aImCOhr6', //key de la api
+                container: 'map',
+                center: [﻿-74.08294743641699, 4.676399836837803], //coordenadas que se muestran
+                zoom: 17
+
+            });
+
+            map.addControl(new tt.FullscreenControl());//control pantalla completa
+            map.addControl(new tt.NavigationControl());//control de navegacion 
+            map.on('load', function () {//funcion de mostrar el trafico activada
+                map.showTrafficFlow();
+
+            });
+
+            map.on('load', function () {//funcion para sombrear una parte del mapa
+                map.addLayer({
+                    'id': 'overlay',
+                    'type': 'fill', //parametros del objeto a crear
+                    'source': {
+                        'type': 'geojson',
+                        'data': {
+                            'type': 'Feature',
+                            'geometry': {
+                                'type': 'Polygon', //genera un poligono 
+                                'coordinates': [[[-74.05359334013936, 4.6700694812385795],
+                                        [-74.01084965806817, 4.666818735830603],
+                                        [-74.07453602784835, 4.6457740728677654]]]//coordenadas que sombreara
+                            }
+                        }
+                    },
+                    'layout': {},
+                    'paint': {
+                        'fill-color': '#db356c',
+                        'fill-opacity': 0.5,
+                        'fill-outline-color': 'black'//colores y opacidad del area sombreada
+                    }
+                });
+            });
+
+            var marker = new tt.Marker().setLngLat([-74.08294743641699, 4.676399836837803]).addTo(map);
+            //marcador de ubicacion y lo añade al programa, objeto 
+            var popupOffsets = {
+                top: [0, 0],
+                bottom: [0, -70],
+                'bottom-right': [0, -70],
+                'bottom-left': [0, -70], //indicaciones de tamaño y ubicacion 
+                left: [25, -35],
+                right: [-25, -35]
+            }
+
+            var popup = new tt.Popup({offset: popupOffsets}).setHTML("simon bolivar, parque");
+            //evento que se activa al seleccionarlo y tecto que muestra
+        </script>
+    </body>
+</html>
